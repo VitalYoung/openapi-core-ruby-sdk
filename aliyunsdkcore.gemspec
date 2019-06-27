@@ -22,7 +22,8 @@ Gem::Specification.new do |s|
   s.require_paths      = ["lib"]
 
   s.add_dependency 'faraday', '~> 0.15.4'
-  s.add_dependency 'activesupport', '>= 4.0.0'
+  s.add_dependency 'activesupport', '<= 4.2.11'
+  s.add_dependency 'public_suffix', '<= 2.0.5'
 
   s.add_development_dependency "simplecov", ">= 0.16.1"
   s.add_development_dependency "rspec", ">= 3.8.0"

@@ -3,6 +3,14 @@ require 'openssl'
 require 'faraday'
 require 'active_support/all'
 
+unless [].respond_to? :to_h
+  class Array
+    def to_h
+      Hash[self]
+    end
+  end
+end
+
 module AliyunSDKCore
 
   class RPCClient
@@ -24,7 +32,7 @@ module AliyunSDKCore
       self.codes.merge config[:codes] if config[:codes]
     end
 
-    def request(action:, params: {}, opts: {})
+    def request(action: '', params: {}, opts: {})
       opts           = self.opts.merge(opts)
       action         = upcase_first(action) if opts[:format_action]
       params         = format_params(params) unless opts[:format_params]

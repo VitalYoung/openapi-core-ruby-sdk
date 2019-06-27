@@ -19,7 +19,7 @@ module AliyunSDKCore
       self.security_token    = config[:security_token]
     end
 
-    def request(method:, uri:, params: {}, body: {}, headers: {}, options: {})
+    def request(method: '', uri: '', params: {}, body: {}, headers: {}, options: {})
 
       mix_headers = default_headers.merge(headers)
 
@@ -42,7 +42,7 @@ module AliyunSDKCore
       if response_content_type.start_with?('application/json')
         if response.status >= 400
           result = JSON.parse(response.body)
-          raise StandardError, "code: #{response.status}, #{result['Message']} requestid: #{result['RequestId']}"
+          raise StandardError, "code: #{response.status}, error: #{result['Message']}, requestid: #{result['RequestId']}"
         end
       end
 

@@ -123,7 +123,7 @@ describe 'ROAClient' do
     describe 'request with json response should ok' do
       it 'json response should ok' do
         stub_request(:get, "https://ros.aliyuncs.com/")
-          .to_return(status: 200, headers: { 'Content-Type': 'application/json' }, body: { ok: true }.to_json)
+          .to_return(status: 200, headers: { 'Content-Type' => 'application/json' }, body: { ok: true }.to_json)
         response = roa_client.get(uri: '/')
         expect(response.body).to eq({ ok: true }.to_json)
       end
@@ -132,7 +132,7 @@ describe 'ROAClient' do
     describe 'request(204) with json response should ok' do
       it 'json response should ok' do
         stub_request(:get, "https://ros.aliyuncs.com/")
-          .to_return(status: 204, headers: { 'Content-Type': 'application/json' }, body: '')
+          .to_return(status: 204, headers: { 'Content-Type' => 'application/json' }, body: '')
         response = roa_client.get(uri: '/')
         expect(response.body).to eq('')
       end
@@ -140,20 +140,20 @@ describe 'ROAClient' do
 
     describe 'request(400) with json response should ok' do
       let(:status) { 400 }
-      let(:headers) { { 'Content-Type': 'application/json' } }
-      let(:body) { { 'Message': 'error message', 'RequestId': 'requestid', 'Code': 'errorcode' }.to_json }
+      let(:headers) { { 'Content-Type' => 'application/json' } }
+      let(:body) { { 'Message' => 'error message', 'RequestId' => 'requestid', 'Code' => 'errorcode' }.to_json }
       it 'json response should ok' do
         stub_request(:get, "https://ros.aliyuncs.com/")
           .to_return(status: status, headers: headers, body: body)
         expect {
           roa_client.get(uri: '/')
-        }.to raise_error(StandardError, 'code: 400, error message requestid: requestid')
+        }.to raise_error(StandardError, 'code: 400, error: error message, requestid: requestid')
       end
     end
 
     describe 'request with xml response should ok' do
       let(:status) { 200 }
-      let(:headers) { { 'Content-Type': 'text/xml' } }
+      let(:headers) { { 'Content-Type' => 'text/xml' } }
       let(:body) do
         <<-XML
           <note>
@@ -174,7 +174,7 @@ describe 'ROAClient' do
 
     describe 'request(400) with xml response should ok' do
       let(:status) { 400 }
-      let(:headers) { { 'Content-Type': 'text/xml' } }
+      let(:headers) { { 'Content-Type' => 'text/xml' } }
       let(:body) do
         <<-XML
           <Error>
@@ -205,13 +205,13 @@ describe 'ROAClient' do
     describe 'post should ok' do
       it 'should ok' do
         stub_request(:get, "https://ros.aliyuncs.com/")
-          .to_return(status: 200, headers: { 'content-type': 'application/json' }, body: { ok: true }.to_json)
+          .to_return(status: 200, headers: { 'content-type' => 'application/json' }, body: { ok: true }.to_json)
         response = roa_client.post(uri: '/', body: 'text')
         expect(response.body).to eq('{"ok":true}')
       end
       it 'should ok with query' do
         stub_request(:get, "https://ros.aliyuncs.com/?k=v")
-          .to_return(status: 200, headers: { 'content-type': 'application/json' }, body: { ok: true }.to_json)
+          .to_return(status: 200, headers: { 'content-type' => 'application/json' }, body: { ok: true }.to_json)
         response = roa_client.post(uri: '/', params: { k: 'v' }, body: 'text')
         expect(response.body).to eq('{"ok":true}')
       end
@@ -220,7 +220,7 @@ describe 'ROAClient' do
     describe 'put should ok' do
       it 'should ok' do
         stub_request(:get, "https://ros.aliyuncs.com/")
-          .to_return(status: 200, headers: { 'content-type': 'application/json' }, body: { ok: true }.to_json)
+          .to_return(status: 200, headers: { 'content-type' => 'application/json' }, body: { ok: true }.to_json)
         response = roa_client.put(uri: '/', body: 'text')
         expect(response.body).to eq('{"ok":true}')
       end
@@ -229,7 +229,7 @@ describe 'ROAClient' do
     describe 'delete should ok' do
       it 'should ok' do
         stub_request(:get, "https://ros.aliyuncs.com/")
-          .to_return(status: 200, headers: { 'content-type': 'application/json' }, body: { ok: true }.to_json)
+            .to_return(status: 200, headers: { 'content-type' => 'application/json' }, body: { ok: true }.to_json)
         response = roa_client.delete(uri: '/')
         expect(response.body).to eq('{"ok":true}')
       end
@@ -246,13 +246,13 @@ describe 'ROAClient' do
     it 'canonicalized_headers should ok' do
       expect(roa_client.send(:canonicalized_headers, {})).to be_empty
       expect(roa_client.send(:canonicalized_headers, { key: 'value' })).to be_empty
-      expect(roa_client.send(:canonicalized_headers, { 'x-acs-key': 'value' })).to eq("x-acs-key:value\n")
+      expect(roa_client.send(:canonicalized_headers, { 'x-acs-key' => 'value' })).to eq("x-acs-key:value\n")
     end
 
     it 'canonicalized_resource should ok' do
       expect(roa_client.send(:canonicalized_resource, '/')).to eq('/')
       expect(roa_client.send(:canonicalized_resource, '/', { key: 'value' })).to eq('/?key=value')
-      expect(roa_client.send(:canonicalized_resource, '/', { key: 'value', 'key1': 'value2' })).to eq('/?key=value&key1=value2')
+      expect(roa_client.send(:canonicalized_resource, '/', { key: 'value', 'key1' => 'value2' })).to eq('/?key=value&key1=value2')
     end
 
     it 'string_to_sign should ok ' do
