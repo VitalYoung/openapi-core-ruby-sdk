@@ -73,7 +73,7 @@ describe 'ROAClient' do
     end
 
     let(:default_header_keys) do
-      %w(accept date host
+      %w(content-type accept date host
           x-acs-signature-nonce
           x-acs-signature-method
           x-acs-signature-version
@@ -100,6 +100,7 @@ describe 'ROAClient' do
       )
 
       default_header_keys = %w(
+        content-type
         accept
         date
         host

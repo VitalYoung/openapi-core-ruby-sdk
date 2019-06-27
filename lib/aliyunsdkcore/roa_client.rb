@@ -76,6 +76,7 @@ module AliyunSDKCore
 
     def default_headers
       default_headers = {
+        'content-type' =>            'application/json',
         'accept' =>                  'application/json',
         'date' =>                    Time.now.httpdate,
         'host' =>                    URI(self.endpoint).host,
@@ -114,8 +115,9 @@ module AliyunSDKCore
     end
 
     def canonicalized_resource(uri, query_hash = {})
+      _uri = uri.start_with?('http://') || uri.start_with?('https://') ? uri.gsub(self.endpoint, '') : uri
       query_string = query_hash.map { |key, value| "#{key}=#{value}" }.join('&')
-      query_string.empty? ? uri : "#{uri}?#{query_string}"
+      query_string.empty? ? _uri : "#{_uri}?#{query_string}"
     end
 
     def authorization(string_to_sign)
